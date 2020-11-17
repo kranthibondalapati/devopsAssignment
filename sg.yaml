@@ -35,7 +35,7 @@ Resources:
                     !Sub '${vpcinfoStackName}-VPC'
             SecurityGroupIngress:
                 -
-                    CidrIp: 0.0.0.0/0
+                    CidrIp: 100.10.2.3/32
                     FromPort: 22
                     IpProtocol: tcp
                     ToPort: 22
