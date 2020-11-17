@@ -1,0 +1,67 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'SG stack'
+Metadata: {}
+Parameters:
+    vpcinfoStackName:
+        Description: 'Name of an active CloudFormation stack that contains the VPC ID, subnets etc..'
+        Type: String
+        Default: dev-vpc
+        MinLength: 1
+        MaxLength: 255
+        AllowedPattern: '^[a-zA-Z][-a-zA-Z0-9]*$'
+    Environment:
+        Description: Environment Name
+        Type: String
+        Default: dev
+        AllowedValues:
+        - dev
+        - prod
+
+    AppName:
+        Description: Application name
+        Type: String
+        Default: demo
+
+Mappings: {}
+
+Resources:
+    JumpboxSG:
+        Type: 'AWS::EC2::SecurityGroup'
+        Properties:
+            GroupName: !Sub '${Environment}-jumpbox-sg'
+            GroupDescription: JumpboxSG
+            VpcId:
+                Fn::ImportValue:
+                    !Sub '${vpcinfoStackName}-VPC'
+            SecurityGroupIngress:
+                -
+                    CidrIp: 0.0.0.0/0
+                    FromPort: 22
+                    IpProtocol: tcp
+                    ToPort: 22
+                    Description: 'Internet'
+    EC2SecurityGroup:
+        Type: 'AWS::EC2::SecurityGroup'
+        Properties:
+            GroupName: !Sub '${Environment}-${AppName}-ec2-sg'
+            GroupDescription: EC2SecurityGroup
+            VpcId:
+                Fn::ImportValue:
+                    !Sub '${vpcinfoStackName}-VPC'
+            SecurityGroupIngress:
+                -
+                    IpProtocol: tcp
+                    FromPort: 22
+                    ToPort: 22
+                    Description: 'JumpboxSG'
+                    SourceSecurityGroupId:
+                        Ref: JumpboxSG
+
+Outputs:
+    EC2SecurityGroup:
+        Description: The security group Id of the EC2 SG
+        Value:
+            Ref: EC2SecurityGroup
+        Export:
+            Name:
+                !Sub '${AWS::StackName}-EC2SG'
