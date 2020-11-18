@@ -8,7 +8,7 @@ phases:
     commands:
       - yum install python2-pip amazon-linux-extras -y
       - pip install cfn-lint
-      - amazon-linux-extras install ruby2.6
+      - PYTHON=python2 amazon-linux-extras install ruby2.6
       - yum install ruby-devel -y
       - gem install cfn-nag
   build:
