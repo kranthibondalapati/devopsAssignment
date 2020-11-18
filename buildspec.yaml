@@ -14,8 +14,8 @@ phases:
   build:
     run-as: root
     commands:
-      - cfn-lint alert.yaml sampleEC2.yaml sg.yaml >>/tmp/lint-output.txt
-      - cfn_nag_scan --input-path sg.yaml alert.yaml sampleEC2.yaml || true >>/tmp/lint-output.txt
+      - cfn-lint alert.yaml sampleEC2.yaml sg.yaml vpc.yaml keypair.yaml >>/tmp/lint-output.txt
+      - cfn_nag_scan --input-path sg.yaml alert.yaml sampleEC2.yaml vpc.yaml keypair.yaml|| true >>/tmp/lint-output.txt
 
 #   post_build:
 #     run-as: root
