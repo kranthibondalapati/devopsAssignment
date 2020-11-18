@@ -154,7 +154,7 @@ Resources:
               owner: root
               group: root
             '/home/ubuntu/ansible-collection-hardening/hardening-playbook.yaml':
-              content: !Sub |
+              content: |
                 ---
                 - hosts: localhost
                   gather_facts: True
