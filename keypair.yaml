@@ -1,0 +1,59 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Creates EC2 Keypair 
+Parameters:
+
+  Environment:
+
+    Description: Name of the Environment like dev, stage, prod etc..
+
+    Type: String
+
+    Default: ''
+
+Resources:
+
+  PrivateKey:
+
+    Type: Custom::RSAKey
+
+    Properties:
+
+      Name: !Sub '${AWS::StackName}-privatekey'
+
+      Version: v1
+
+      NoEcho: False
+
+      ServiceToken: !Sub 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:sample-secret-provider-keypair'
+
+
+  KeyPair:
+
+    Type: Custom::KeyPair
+
+    DependsOn: PrivateKey
+
+    Properties:
+
+      Name: !Sub '${AWS::StackName}'
+
+      NoEcho: False
+
+      PublicKeyMaterial: !GetAtt 'PrivateKey.PublicKey'
+
+      ServiceToken: !Sub 'arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:sample-secret-provider-keypair'
+
+Outputs:
+
+  PublicKey:
+
+    Value: !GetAtt 'PrivateKey.PublicKey'
+
+    Description: the public key, safe to expose
+
+  PrivateKeyArn:
+
+    Value: !GetAtt 'PrivateKey.Arn'
+
+    Description: ARN of the private key in the Parameter Store
