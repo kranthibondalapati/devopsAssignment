@@ -15,7 +15,7 @@ phases:
     run-as: root
     commands:
       - cfn-lint alert.yaml sampleEC2.yaml sg.yaml
-      - cfn_nag_scan --input-path alert.yaml sampleEC2.yaml sg.yaml
+      - cfn_nag_scan --input-path sg.yaml
 
 #   post_build:
 #     run-as: root
