@@ -6,7 +6,7 @@ phases:
   pre_build:
     run-as: root
     commands:
-      - yum install python2-pip
+      - yum install python2-pip -y
       - pip install cfn-lint
       - amazon-linux-extras install ruby2.6
       - yum install ruby-devel -y
